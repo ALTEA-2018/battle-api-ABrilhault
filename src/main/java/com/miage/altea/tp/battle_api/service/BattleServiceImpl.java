@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.miage.altea.tp.battle_api.bo.Battle;
 import com.miage.altea.tp.battle_api.bo.BattleTrainer;
+import com.miage.altea.tp.battle_api.exceptions.TrainerException;
 import com.miage.altea.tp.battle_api.repository.BattleRepository;
 
 @Service
@@ -51,6 +52,16 @@ public class BattleServiceImpl implements BattleService {
 	@Override
 	public Iterable<Battle> getBattles() {
 		return battleRepository.findAll();
+	}
+
+	@Override
+	public Battle attack(UUID uuid, String trainerName) throws TrainerException {
+		Battle battle = battleRepository.findOne(uuid);
+		BattleTrainer attacker = battle.getTrainer().getName().equals(trainerName) ? battle.getTrainer() : battle.getOpponent();
+		logger.info(">>> [BattleService] - is the attacker's turn : ", attacker.getNextTurn());
+
+		if (!attacker.getNextTurn()) throw new TrainerException("This is not the turn of trainer "+ trainerName);
+		return battle;
 	}
 
 	private BattleTrainer getTrainerByName(String name) {

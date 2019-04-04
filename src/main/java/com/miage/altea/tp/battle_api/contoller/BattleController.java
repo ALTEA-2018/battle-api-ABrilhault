@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.miage.altea.tp.battle_api.bo.Battle;
+import com.miage.altea.tp.battle_api.exceptions.TrainerException;
 import com.miage.altea.tp.battle_api.service.BattleService;
 
 @RestController
@@ -29,6 +30,12 @@ public class BattleController {
 	public Battle createBattle(@RequestParam("trainer") String trainer, @RequestParam("opponent") String opponent){
 		logger.info(">>> [BattleController] - createBattle ");
 		return battleService.createBattle(trainer, opponent);
+	}
+
+	@PostMapping("/{id}/{trainerName}/attack")
+	public Battle attack(@PathVariable("id") UUID uuid, @PathVariable("trainerName") String trainerName) throws TrainerException {
+		logger.info(">>> [BattleController] - attack from {}", trainerName);
+		return battleService.attack(uuid, trainerName);
 	}
 
 	@GetMapping("/{id}")
