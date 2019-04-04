@@ -37,4 +37,9 @@ public class BattleController {
 		return battleService.getBattleById(uuid);
 	}
 
+	@GetMapping("")
+	public Iterable getAllBattle() {
+		logger.info(">>> [BattleController] - getAllBattles ");
+		return battleService.getBattles();
+	}
 }

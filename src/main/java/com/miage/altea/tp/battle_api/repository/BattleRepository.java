@@ -8,4 +8,5 @@ public interface BattleRepository {
 
 	Battle findOne(UUID id);
 	Battle save(Battle battle);
+	Iterable<Battle> findAll();
 }

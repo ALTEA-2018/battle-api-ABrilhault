@@ -9,4 +9,6 @@ public interface BattleService {
 	Battle createBattle(String trainer, String opponent);
 
 	Battle getBattleById(UUID uuid);
+
+	Iterable<Battle> getBattles();
 }

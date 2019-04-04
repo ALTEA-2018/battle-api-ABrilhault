@@ -2,6 +2,7 @@ package com.miage.altea.tp.battle_api.repository;
 
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
@@ -21,5 +22,10 @@ public class BattleRepositoryImpl implements BattleRepository {
 	public Battle save(Battle battle) {
 		battles.put(battle.getUuid(), battle);
 		return battle;
+	}
+
+	@Override
+	public Iterable<Battle> findAll() {
+		return battles.values().stream().collect(Collectors.toList());
 	}
 }

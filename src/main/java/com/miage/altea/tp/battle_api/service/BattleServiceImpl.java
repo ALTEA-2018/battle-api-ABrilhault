@@ -48,6 +48,11 @@ public class BattleServiceImpl implements BattleService {
 		return battleRepository.findOne(uuid);
 	}
 
+	@Override
+	public Iterable<Battle> getBattles() {
+		return battleRepository.findAll();
+	}
+
 	private BattleTrainer getTrainerByName(String name) {
 		var trainer = restTemplate.getForObject(trainerServiceUrl + "/trainers/{name}", BattleTrainer.class, name);
 		trainer.getTeam()
