@@ -1,8 +1,12 @@
 package com.miage.altea.tp.battle_api.contoller;
 
+import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +29,12 @@ public class BattleController {
 	public Battle createBattle(@RequestParam("trainer") String trainer, @RequestParam("opponent") String opponent){
 		logger.info(">>> [BattleController] - createBattle ");
 		return battleService.createBattle(trainer, opponent);
+	}
+
+	@GetMapping("/{id}")
+	public Battle getBattle(@PathVariable("id") UUID uuid) {
+		logger.info(">>> [BattleController] - getBattle ");
+		return battleService.getBattleById(uuid);
 	}
 
 }

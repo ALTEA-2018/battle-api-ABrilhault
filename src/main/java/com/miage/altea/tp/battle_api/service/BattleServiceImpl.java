@@ -43,6 +43,10 @@ public class BattleServiceImpl implements BattleService {
 		return battleRepository.save(new Battle(UUID.randomUUID(), trainer1, opponent1));
 	}
 
+	@Override
+	public Battle getBattleById(UUID uuid) {
+		return battleRepository.findOne(uuid);
+	}
 
 	private BattleTrainer getTrainerByName(String name) {
 		var trainer = restTemplate.getForObject(trainerServiceUrl + "/trainers/{name}", BattleTrainer.class, name);
