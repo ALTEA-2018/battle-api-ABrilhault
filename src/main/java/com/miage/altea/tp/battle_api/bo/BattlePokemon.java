@@ -1,10 +1,14 @@
 package com.miage.altea.tp.battle_api.bo;
 
-public class BattlePokemon {
+import java.io.Serializable;
+
+public class BattlePokemon implements Serializable {
 
 	private int id;
 
-	private PokemonType pokemonType;
+	private int pokemonType;
+
+	private PokemonType type;
 
 	private int level;
 
@@ -13,17 +17,17 @@ public class BattlePokemon {
 	public BattlePokemon() {
 	}
 
-	public BattlePokemon(PokemonType pokemonType, int level) {
+	public BattlePokemon(int pokemonType, int level) {
 		this.pokemonType = pokemonType;
 		this.level = level;
 	}
 
-	public void initBattleStats(Stats battleStats, int level) {
+	public void initBattleStats(Stats baseStats, int level) {
 		battleStats = new Stats();
-		int attack = level <= 50 ? (5 + (battleStats.getAttack() * level / 50)) : (battleStats.getAttack() * 2 + 5);
-		int defense = level <= 50 ? (5 + (battleStats.getDefense() * level / 50)) : (battleStats.getDefense() * 2 + 5);
-		int speed = level <= 50 ? (5 + (battleStats.getSpeed() * level / 50)) : (battleStats.getSpeed() * 2 + 5);
-		int hp = level <= 50 ? (10 + level + (battleStats.getHp() * level / 50)) : (battleStats.getHp() * 2 + 110);
+		int attack = level <= 50 ? (5 + (baseStats.getAttack() * level / 50)) : (baseStats.getAttack() * 2 + 5);
+		int defense = level <= 50 ? (5 + (baseStats.getDefense() * level / 50)) : (baseStats.getDefense() * 2 + 5);
+		int speed = level <= 50 ? (5 + (baseStats.getSpeed() * level / 50)) : (baseStats.getSpeed() * 2 + 5);
+		int hp = level <= 50 ? (10 + level + (baseStats.getHp() * level / 50)) : (baseStats.getHp() * 2 + 110);
 		battleStats.setAttack(attack);
 		battleStats.setDefense(defense);
 		battleStats.setSpeed(speed);
@@ -38,11 +42,11 @@ public class BattlePokemon {
 		this.battleStats = battleStats;
 	}
 
-	public PokemonType getPokemonType() {
+	public int getPokemonType() {
 		return pokemonType;
 	}
 
-	public void setPokemonType(PokemonType pokemonType) {
+	public void setPokemonType(int pokemonType) {
 		this.pokemonType = pokemonType;
 	}
 
@@ -54,4 +58,11 @@ public class BattlePokemon {
 		this.level = level;
 	}
 
+	public PokemonType getType() {
+		return type;
+	}
+
+	public void setType(PokemonType type) {
+		this.type = type;
+	}
 }

@@ -1,8 +1,9 @@
 package com.miage.altea.tp.battle_api.bo;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class BattleTrainer {
+public class BattleTrainer implements Serializable {
 
 	private String name;
 

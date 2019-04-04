@@ -1,24 +1,24 @@
 package com.miage.altea.tp.battle_api.bo;
-
 import java.util.UUID;
 
 public class Battle {
 
-	private UUID id;
+	private UUID uuid;
 	private BattleTrainer trainer;
 	private BattleTrainer opponent;
 
-	public Battle(BattleTrainer trainer, BattleTrainer opponent) {
+	public Battle(UUID uuid, BattleTrainer trainer, BattleTrainer opponent) {
+		this.uuid = uuid;
 		this.trainer = trainer;
 		this.opponent = opponent;
 	}
 
-	public UUID getId() {
-		return id;
+	public UUID getUuid() {
+		return uuid;
 	}
 
-	public void setId(UUID id) {
-		this.id = id;
+	public void setUuid(UUID uuid) {
+		this.uuid = uuid;
 	}
 
 	public BattleTrainer getTrainer() {
