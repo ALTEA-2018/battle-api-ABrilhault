@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.miage.altea.tp.battle_api.bo.Battle;
+import com.miage.altea.tp.battle_api.bo.BattlePokemon;
 import com.miage.altea.tp.battle_api.bo.BattleTrainer;
 import com.miage.altea.tp.battle_api.exceptions.TrainerException;
 import com.miage.altea.tp.battle_api.repository.BattleRepository;
@@ -57,12 +58,28 @@ public class BattleServiceImpl implements BattleService {
 	@Override
 	public Battle attack(UUID uuid, String trainerName) throws TrainerException {
 		Battle battle = battleRepository.findOne(uuid);
-		BattleTrainer attacker = battle.getTrainer().getName().equals(trainerName) ? battle.getTrainer() : battle.getOpponent();
-		logger.info(">>> [BattleService] - is the attacker's turn : ", attacker.getNextTurn());
+		Boolean isTrainer = battle.getTrainer().getName().equals(trainerName);
+		logger.info(">>> [BattleService] - is the trainer's turn : ", battle.getTrainer().getNextTurn());
+		if ((isTrainer && !battle.getTrainer().getNextTurn()) || (!isTrainer && !battle.getOpponent().getNextTurn())) throw new TrainerException("This is not the turn of trainer "+ trainerName);
 
-		if (!attacker.getNextTurn()) throw new TrainerException("This is not the turn of trainer "+ trainerName);
+		BattleTrainer attacker = isTrainer ? battle.getTrainer() : battle.getOpponent();
+		BattleTrainer attacked = isTrainer ? battle.getOpponent(): battle.getTrainer();
+
+		BattlePokemon attackerPokemon = getNextPokemon(attacker);
+		BattlePokemon attackedPokemon = getNextPokemon(attacked);
+		int attack = ((2 * attackerPokemon.getLevel() / 5) + (2 * attackerPokemon.getBattleStats().getAttack() / attackedPokemon.getBattleStats().getDefense())) + 2;
+		attackedPokemon.getBattleStats().setHp(attackedPokemon.getBattleStats().getHp() - attack);
+
+		attacker.setNextTurn(false);
+		attacked.setNextTurn(true);
 		return battle;
 	}
+
+
+	private BattlePokemon getNextPokemon(BattleTrainer trainer) {
+		return trainer.getTeam().stream().filter(p -> p.getBattleStats().getHp() > 0).findFirst().get();
+	}
+
 
 	private BattleTrainer getTrainerByName(String name) {
 		var trainer = restTemplate.getForObject(trainerServiceUrl + "/trainers/{name}", BattleTrainer.class, name);
@@ -74,6 +91,7 @@ public class BattleServiceImpl implements BattleService {
 				});
 		return trainer;
 	}
+
 
 	@Autowired
 	@Qualifier("trainerApiRestTemplate")
